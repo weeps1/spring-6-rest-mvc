@@ -18,6 +18,7 @@ public class BeerServiceImpl implements BeerService {
     public BeerServiceImpl() {
         this.beerMap = new HashMap<>();
 
+
         Beer beer1 = Beer.builder()
                 .id(UUID.randomUUID())
                 .version(1)
@@ -69,6 +70,46 @@ public class BeerServiceImpl implements BeerService {
         log.debug("Get beer by id in service called");
 
         return beerMap.get(id);
+    }
+
+    @Override
+    public Beer saveNewBeer(Beer beer) {
+        Beer savedBeer = Beer.builder()
+                .id(UUID.randomUUID())
+                .createdDate(LocalDateTime.now())
+                .updateDate(LocalDateTime.now())
+                .beerName(beer.getBeerName())
+                .beerStyle(beer.getBeerStyle())
+                .quantityOnHand(beer.getQuantityOnHand())
+                .upc(beer.getUpc())
+                .price(beer.getPrice())
+                .build();
+
+        beerMap.put(savedBeer.getId(), savedBeer);
+
+        return savedBeer;
+    }
+
+    public static String formNewString(int N, String S) {
+        Map<Character , Integer> frequencyMap = new HashMap<>();
+
+        for(int i = 0 ; i<N ; i++) {
+            char c = S.charAt(i);
+            frequencyMap.put(c, frequencyMap.getOrDefault(c,0) +1);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0;i<N ; i++) {
+            char c = S.charAt(i);
+            if(frequencyMap.get(c) > 1)
+                sb.append(c);
+        }
+
+        char[] chars = sb.toString().toCharArray();
+        Arrays.sort(chars);
+
+        return new String(chars);
     }
 
 }
